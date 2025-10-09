@@ -31,9 +31,6 @@ with st.sidebar:
     num_derogatorios = 0
     
 
-
-
-
 #MAIN
 st.title('RISK SCORE ANALYZER')
 
@@ -71,64 +68,111 @@ if st.sidebar.button('CALCULAR RIESGO'):
     kpi_el = int(EL.principal * EL.pd * EL.ead * EL.lgd)
 
     #Velocimetros
-    #Codigo de velocimetros tomado de https://towardsdatascience.com/5-streamlit-components-to-build-better-applications-71e0195c82d4
     pd_options = {
+            "xAxis": {
+                "show": False,
+                "type": "category",
+                "data": [{"value": kpi_pd, 'name': 'PD'}],
+            },
+            "yAxis": {
+                "show": False,
+                "type": "value",
+                "max": 100,
+            },
             "series": [
                 {
-                    "name": 'PD',
-                    "type": "gauge",
-                    "startAngle": 180,
-                    "endAngle": 0,
-                    "min": 0,
-                    "max": 100,
-                    "splitNumber": 10,
-                    "axisLine": {"lineStyle": {"width": 10, "color": [[0.3, "#55DD55"], [0.7, "#FFAA00"], [1, "#FF4444"]]}},
-                    "pointer": {"icon": "rect", "length": "70%", "width": 6},
-                    "progress": {"show": True, "width": 10},
-                    "detail": {"formatter": "{value}%", "fontSize": 20},
-                    "data": [{"value": kpi_pd, 'name': 'PD'}],
+                    "type": "bar",
+                    "data": [75],
+                    "barWidth": 30,
+                    "itemStyle": {
+                        "color": {
+                            "type": "linear",
+                            "x": 0,
+                            "y": 1,
+                            "x2": 0,
+                            "y2": 0,
+                            "colorStops": [
+                                {"offset": 0, "color": "#55DD55"},  # verde abajo
+                                {"offset": 0.5, "color": "#FFAA00"},  # amarillo
+                                {"offset": 1, "color": "#FF4444"},  # rojo arriba
+                            ],
+                        },
+                        "borderRadius": [10, 10, 0, 0],
+                    },
                 }
-            ]
+            ],
         }
 
     #Velocimetro para ead
     ead_options = {
+            "xAxis": {
+                "show": False,
+                "type": "category",
+                "data": [{"value": kpi_ead, 'name': 'EAD'}],
+            },
+            "yAxis": {
+                "show": False,
+                "type": "value",
+                "max": 100,
+            },
             "series": [
                 {
-                    "name": 'EAD',
-                    "type": "gauge",
-                    "startAngle": 180,
-                    "endAngle": 0,
-                    "min": 0,
-                    "max": 100,
-                    "splitNumber": 10,
-                    "axisLine": {"lineStyle": {"width": 10, "color": [[0.3, "#55DD55"], [0.7, "#FFAA00"], [1, "#FF4444"]]}},
-                    "pointer": {"icon": "rect", "length": "70%", "width": 6},
-                    "progress": {"show": True, "width": 10},
-                    "detail": {"formatter": "{value}%", "fontSize": 20},
-                    "data": [{"value": kpi_ead, 'name': 'EAD'}],
+                    "type": "bar",
+                    "data": [75],
+                    "barWidth": 30,
+                    "itemStyle": {
+                        "color": {
+                            "type": "linear",
+                            "x": 0,
+                            "y": 1,
+                            "x2": 0,
+                            "y2": 0,
+                            "colorStops": [
+                                {"offset": 0, "color": "#55DD55"},  # verde abajo
+                                {"offset": 0.5, "color": "#FFAA00"},  # amarillo
+                                {"offset": 1, "color": "#FF4444"},  # rojo arriba
+                            ],
+                        },
+                        "borderRadius": [10, 10, 0, 0],
+                    },
                 }
-            ]
+            ],
         }
 
     #Velocimetro para lgd
     lgd_options = {
+            "xAxis": {
+                "show": False,
+                "type": "category",
+                "data": [{"value": kpi_lgd, 'name': 'LGD'}],
+            },
+            "yAxis": {
+                "show": False,
+                "type": "value",
+                "max": 100,
+            },
             "series": [
                 {
-                    "name": 'LGD',
-                    "type": "gauge",
-                    "startAngle": 180,
-                    "endAngle": 0,
-                    "min": 0,
-                    "max": 100,
-                    "splitNumber": 10,
-                    "axisLine": {"lineStyle": {"width": 10, "color": [[0.3, "#55DD55"], [0.7, "#FFAA00"], [1, "#FF4444"]]}},
-                    "pointer": {"icon": "rect", "length": "70%", "width": 6},
-                    "progress": {"show": True, "width": 10},
-                    "detail": {"formatter": "{value}%", "fontSize": 20},
-                    "data": [{"value": kpi_lgd, 'name': 'LGD'}],
+                    "type": "bar",
+                    "data": [75],
+                    "barWidth": 30,
+                    "itemStyle": {
+                        "color": {
+                            "type": "linear",
+                            "x": 0,
+                            "y": 1,
+                            "x2": 0,
+                            "y2": 0,
+                            "colorStops": [
+                                {"offset": 0, "color": "#55DD55"},  # verde abajo
+                                {"offset": 0.5, "color": "#FFAA00"},  # amarillo
+                                {"offset": 1, "color": "#FF4444"},  # rojo arriba
+                            ],
+                        },
+                        "borderRadius": [10, 10, 0, 0],
+                    },
                 }
-            ]
+            ],
         }
     #Representarlos en la app
     col1,col2,col3 = st.columns(3)
@@ -151,4 +195,5 @@ if st.sidebar.button('CALCULAR RIESGO'):
 else:
 
     st.write('DEFINE LOS PARÁMETROS DEL PRÉSTAMO Y HAZ CLICK EN CALCULAR RIESGO')
+
 
