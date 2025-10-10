@@ -4,7 +4,7 @@ from streamlit_echarts import st_echarts
 
 #CONFIGURACION DE LA PÁGINA
 st.set_page_config(
-     page_title = 'DS4B Risk Score Analyzer',
+     page_title = 'Risk Score Analyzer',
      page_icon = 'dollar',
      layout = 'wide')
 
@@ -34,7 +34,7 @@ with st.sidebar:
 
 
 #MAIN
-st.title('DS4B RISK SCORE ANALYZER')
+st.title('RISK SCORE ANALYZER')
 
 
 #CALCULAR
@@ -69,71 +69,73 @@ if st.sidebar.button('CALCULAR RIESGO'):
     kpi_lgd = int(EL.lgd * 100)
     kpi_el = int(EL.principal * EL.pd * EL.ead * EL.lgd)
 
-    #Velocimetros
+    def tramo_color_axisline():
+    # Fondo segmentado: verde 0-35, naranja 35-70, rojo 70-100
+    return [
+        [0.35, "#2ECC71"],  # verde hasta 35%
+        [0.70, "#F39C12"],  # naranja hasta 70%
+        [1.00, "#E74C3C"],  # rojo hasta 100%
+    ]
+
+    def tramo_color_axisline():
+    # Fondo segmentado: verde 0-35, naranja 35-70, rojo 70-100
+    return [
+        [0.35, "#2ECC71"],  # verde hasta 35%
+        [0.70, "#F39C12"],  # naranja hasta 70%
+        [1.00, "#E74C3C"],  # rojo hasta 100%
+    ]
+     #Velocimetros
     #Codigo de velocimetros tomado de https://towardsdatascience.com/5-streamlit-components-to-build-better-applications-71e0195c82d4
-    pd_options = {
-            "tooltip": {"formatter": "{a} <br/>{b} : {c}%"},
-            "series": [
-                {
-                    "name": "PD",
-                    "type": "gauge",
-                    "axisLine": {
-                        "lineStyle": {
-                            "width": 10,
-                        },
-                    },
-                    "progress": {"show": "true", "width": 10},
-                    "detail": {"valueAnimation": "true", "formatter": "{value}"},
-                    "data": [{"value": kpi_pd, "name": "PD"}],
-                }
-            ],
-        }
-
-    #Velocimetro para ead
-    ead_options = {
-            "tooltip": {"formatter": "{a} <br/>{b} : {c}%"},
-            "series": [
-                {
-                    "name": "EAD",
-                    "type": "gauge",
-                    "axisLine": {
-                        "lineStyle": {
-                            "width": 10,
-                        },
-                    },
-                    "progress": {"show": "true", "width": 10},
-                    "detail": {"valueAnimation": "true", "formatter": "{value}"},
-                    "data": [{"value": kpi_ead, "name": "EAD"}],
-                }
-            ],
-        }
-
-    #Velocimetro para lgd
-    lgd_options = {
-            "tooltip": {"formatter": "{a} <br/>{b} : {c}%"},
-            "series": [
-                {
-                    "name": "LGD",
-                    "type": "gauge",
-                    "axisLine": {
-                        "lineStyle": {
-                            "width": 10,
-                        },
-                    },
-                    "progress": {"show": "true", "width": 10,},
-                    "detail": {"valueAnimation": "true", "formatter": "{value}"},
-                    "data": [{"value": kpi_lgd, "name": "LGD"}],
-                }
-            ],
-        }
-    #Representarlos en la app
-    col1,col2,col3 = st.columns(3)
-    with col1:
-        st_echarts(options=pd_options, width="110%")
-    with col2:
-        st_echarts(options=ead_options, width="110%")
-    with col3:
-        st_echarts(options=lgd_options, width="110%")
+    def build_gauge(nombre, valor):
+         v = max(0, min(100, int(valor)))
+         return {
+             "series": [
+                 {
+                     "name": nombre.upper(),
+                     "type": "gauge",
+                     "min": 0, "max": 100,
+                     "startAngle": 210, "endAngle": -30,
+                     "axisLine": {
+                         "lineStyle": {
+                             "width": 10,
+                             "color": tramo_color_axisline(),   # <-- tramos fondo
+                         }
+                     },
+                     "splitLine": {"show": False},
+                     "axisTick": {"show": False},
+                     "axisLabel": {"show": False},
+     
+                     # Relleno que cambia de color según el valor
+                     "progress": {
+                         "show": True,
+                         "width": 10,
+                         "itemStyle": {"color": color_progreso(v)}  # <-- color dinámico
+                     },
+     
+                     "pointer": {"show": True, "length": "70%", "width": 4},
+                     "detail": {
+                         "valueAnimation": True,
+                         "formatter": "{value}",
+                         "fontSize": 18
+                     },
+                     "title": {"show": True, "fontSize": 12, "offsetCenter": [0, "25%"]},
+                     "data": [{"value": v, "name": nombre.upper()}],
+                 }
+             ]
+         }
+   # Velocímetros con color por rango
+     pd_options  = build_gauge("PD",  kpi_pd)
+     ead_options = build_gauge("EAD", kpi_ead)
+     lgd_options = build_gauge("LGD", kpi_lgd)
+     
+     # Render
+     col1, col2, col3 = st.columns(3)
+     with col1:
+         st_echarts(options=pd_options,  width="100%", height="240px", key="g_pd")
+     with col2:
+         st_echarts(options=ead_options, width="100%", height="240px", key="g_ead")
+     with col3:
+         st_echarts(options=lgd_options, width="100%", height="240px", key="g_lgd")
 
     #Prescripcion
     col1,col2 = st.columns(2)
@@ -146,6 +148,7 @@ if st.sidebar.button('CALCULAR RIESGO'):
 
 else:
     st.write('DEFINE LOS PARÁMETROS DEL PRÉSTAMO Y HAZ CLICK EN CALCULAR RIESGO')
+
 
 
 
