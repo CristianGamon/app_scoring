@@ -132,13 +132,11 @@ if st.sidebar.button('CALCULAR RIESGO'):
                      #    "data": {"value": kpi_pd, "name": "PD"}
                      #},
      
-                     "pointer": {"show": True, "length": "100%", "width": 4},
+                     "pointer": {"show": True, "length": "100%", "width": 4, "itemStyle":{"color":"#000000"}},
                      "detail": {
                          "valueAnimation": True,
                          "formatter": "{value}",
-                         "fontSize": 18,
-                         "itemStyle": {
-                            "color": "#000000",
+                         "fontSize": 18,                       
                      },
                      "title": {"show": True, "fontSize": 12, "offsetCenter": [0, "25%"]},
                      "data": [{"value": v, "name": nombre.upper()}],
@@ -170,6 +168,7 @@ if st.sidebar.button('CALCULAR RIESGO'):
 
 else:
     st.write('DEFINE LOS PARÁMETROS DEL PRÉSTAMO Y HAZ CLICK EN CALCULAR RIESGO')
+
 
 
 
