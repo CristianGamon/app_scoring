@@ -69,123 +69,64 @@ if st.sidebar.button('CALCULAR RIESGO'):
 
     
     
-    # Normaliza valor a 0–maximum
-    v = float(value)
-    if 0 <= v <= 1:
-        v = v * maximum
-    v = max(0, min(maximum, v))
-    prop = v / maximum  # 0–1
-    
-    def label_from_value(v: float) -> str:
-        """Etiqueta según el valor (0-100). Cambia los umbrales a tu gusto."""
-        if v < 40:
-            return "Negativo"
-        elif v <= 60:
-            return "Neutral"
+    def etiqueta_generica(v: float):
+        if v < 40:  return "Negativo"
+        if v <= 60: return "Neutral"
         return "Positivo"
 
-    def gauge_options(value: float):
-        """
-        Devuelve la configuración ECharts para un indicador semicircular
-        con segmentos y valor central. value entre 0 y 100.
-        """
-        value = max(0, min(100, float(value)))
-        options = {
-            "backgroundColor": "#1f2630",  # fondo oscuro similar a la imagen
-            "series": [
-                {
-                    "type": "gauge",
-                    "startAngle": 210,     # semicircular
-                    "endAngle": -30,
-                    "min": 0,
-                    "max": 100,
-                    "splitNumber": 6,      # número de tramos
-                    "center": ["50%", "60%"],
-                    "radius": "90%",
+    def gauge_options(valor: float, title_label: str, label_fn=etiqueta_generica):
+        v = max(0, min(100, float(valor)))
+        etiqueta = label_fn(v)
+        return {
+            "backgroundColor": "#1f2630",
+            "series": [{
+                "type": "gauge",
+                "startAngle": 210, "endAngle": -30,
+                "min": 0, "max": 100, "splitNumber": 6,
+                "center": ["50%", "60%"], "radius": "90%",
 
-                    # arco de fondo con segmentos (rojo -> ámbar -> verde)
-                    "axisLine": {
-                        "roundCap": True,
-                        "lineStyle": {
-                            "width": 22,
-                            "color": [
-                                [0.33, "#d84343"],  # rojo
-                                [0.66, "#f1c232"],  # ámbar
-                                [1.00, "#3ecf8e"],  # verde
-                            ],
-                        },
-                    },
-                    # líneas de división gruesas para simular “segmentos con hueco”
-                    "splitLine": {
-                        "distance": -22,
-                        "length": 12,
-                        "lineStyle": {"width": 10, "color": "#1f2630"}  # mismo color del fondo
-                    },
-                    "axisTick": {"show": False},
-                    "axisLabel": {"show": False},
+                # Arco por segmentos (rojo-ámbar-verde)
+                "axisLine": {"roundCap": True, "lineStyle": {
+                    "width": 22,
+                    "color": [[0.33, "#d84343"], [0.66, "#f1c232"], [1.0, "#3ecf8e"]],
+                }},
+                # Huecos entre segmentos (mismo color que el fondo)
+                "splitLine": {
+                    "distance": -22, "length": 12,
+                    "lineStyle": {"width": 10, "color": "#1f2630"}
+                },
+                "axisTick": {"show": False}, "axisLabel": {"show": False},
 
-                    # progreso relleno (arco que avanza)
-                    "progress": {
-                        "show": True,
-                        "roundCap": True,
-                        "width": 22,
-                        "itemStyle": {"color": "#ffffff22"},  # color del “relleno” encima; sutil
-                    },
+                # Progreso y aguja
+                "progress": {"show": True, "roundCap": True, "width": 22, "itemStyle": {"color": "#ffffff22"}},
+                "pointer": {"show": True, "length": "72%", "width": 6, "itemStyle": {"color": "#ffffff"}},
+                "anchor": {"show": True, "size": 10, "itemStyle": {"color": "#ffffff", "shadowColor": "#00000055", "shadowBlur": 8}},
 
-                    # aguja sencilla (opcional). Si no la quieres, pon "show": False
-                    "pointer": {
-                        "show": True,
-                        "length": "72%",
-                        "width": 6,
-                        "itemStyle": {"color": "#ffffff"}  # blanco
-                    },
+                # Título (nombre del gauge) y número central
+                "title": {"show": True, "offsetCenter": [0, "20%"], "color": "#dfe6ee", "fontSize": 18, "fontWeight": 600},
+                "detail": {"valueAnimation": True, "formatter": "{value}", "color": "#ffffff", "fontSize": 44, "offsetCenter": [0, "-2%"]},
 
-                    # círculo en la punta de la aguja (truco: shadow y border)
-                    "anchor": {   # ancla en el centro (estética, opcional)
-                        "show": True,
-                        "size": 10,
-                        "itemStyle": {"color": "#ffffff", "shadowColor": "#00000055", "shadowBlur": 8}
-                    },
-
-                    # título (debajo del número)
-                    "title": {
-                        "show": True,
-                        "offsetCenter": [0, "20%"],
-                        "color": "#dfe6ee",
-                        "fontSize": 22,
-                        "fontWeight": "600"
-                    },
-
-                    # número grande
-                    "detail": {
-                        "valueAnimation": True,
-                        "formatter": "{value}",
-                        "color": "#ffffff",
-                        "fontSize": 48,
-                        "offsetCenter": [0, "-2%"],
-                    },
-
-                    "data": [{"value": value, "name": label_from_value(value)}],
-                }
-            ],
-            "animationDuration": 600,
-            "animationEasing": "cubicOut",
+                "data": [{"value": v, "name": f"{title_label} · {etiqueta}"}],
+            }],
+            "animationDuration": 600, "animationEasing": "cubicOut",
         }
-        return options
-    
-    pd_options  = build_meter_options(kpi_pd,  name="pd",  maximum=100)
-    ead_options = build_meter_options(kpi_ead, name="ead", maximum=100)
-    lgd_options = build_meter_options(kpi_lgd, name="lgd", maximum=100)
-    
-    #Representarlos en la app
-    col1,col2,col3 = st.columns(3)
-    with col1:
-        st_echarts(options=pd_options, width="110%", height="300px", key = 'meter_pd')
-    with col2:
-        st_echarts(options=ead_options, width="110%", height="300px", key = 'meter_ead')
-    with col3:
-        st_echarts(options=lgd_options, width="110%", height="300px", key = 'meter_lgd')
 
+    # ---------- Inputs (ejemplo: sliders; sustituye por tus KPIs) ----------
+    st.sidebar.header("Valores de ejemplo")
+    kpi_pd  = st.sidebar.slider("PD",  0, 100, 54)
+    kpi_ead = st.sidebar.slider("EAD", 0, 100, 72)
+    kpi_lgd = st.sidebar.slider("LGD", 0, 100, 35)
+
+    # ---------- Render ----------
+    st.markdown("### Indicadores de Riesgo")
+    c1, c2, c3 = st.columns(3)
+
+    with c1:
+        st_echarts(gauge_options(kpi_pd,  "PD"),  height="300px", key="gauge_pd")
+    with c2:
+        st_echarts(gauge_options(kpi_ead, "EAD"), height="300px", key="gauge_ead")
+    with c3:
+        st_echarts(gauge_options(kpi_lgd, "LGD"), height="300px", key="gauge_lgd")
     #Prescripcion
     col1,col2 = st.columns(2)
     with col1:
@@ -198,6 +139,7 @@ if st.sidebar.button('CALCULAR RIESGO'):
 else:
 
     st.write('DEFINE LOS PARÁMETROS DEL PRÉSTAMO Y HAZ CLICK EN CALCULAR RIESGO')
+
 
 
 
