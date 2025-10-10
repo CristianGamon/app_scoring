@@ -80,11 +80,11 @@ if st.sidebar.button('CALCULAR RIESGO'):
     def color_progreso(valor):
     # Color del relleno según el valor actual
          if valor < 35:
-             return "#3343BD"  # verde
+             return "#2C3DBEFF"  # verde
          elif valor < 70:
-             return "#F39C12"  # naranja
+             return "#2C3DBEFF"  # naranja
          else:
-             return "#E74C3C"  # rojo
+             return "#2C3DBEFF"  # rojo
      #Velocimetros
     #Codigo de velocimetros tomado de https://towardsdatascience.com/5-streamlit-components-to-build-better-applications-71e0195c82d4
     def build_gauge(nombre, valor):
@@ -109,7 +109,7 @@ if st.sidebar.button('CALCULAR RIESGO'):
                          "distance": 12,
                          "fontSize": 10,
                          # Muestra solo múltiplos de 20
-                         "formatter": "function (val) { return (val % 20 === 0) ? val : ''; }"
+                         "formatter": "{value}"
                      },
                      "axisTick": {
                          "show": True,
@@ -166,6 +166,7 @@ if st.sidebar.button('CALCULAR RIESGO'):
 
 else:
     st.write('DEFINE LOS PARÁMETROS DEL PRÉSTAMO Y HAZ CLICK EN CALCULAR RIESGO')
+
 
 
 
