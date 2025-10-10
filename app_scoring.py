@@ -80,7 +80,7 @@ if st.sidebar.button('CALCULAR RIESGO'):
     def color_progreso(valor):
     # Color del relleno según el valor actual
          if valor < 35:
-             return "#2ECC71"  # verde
+             return "#3343BD"  # verde
          elif valor < 70:
              return "#F39C12"  # naranja
          else:
@@ -95,10 +95,10 @@ if st.sidebar.button('CALCULAR RIESGO'):
                      "name": nombre.upper(),
                      "type": "gauge",
                      "min": 0, "max": 100,
-                     "startAngle": 210, "endAngle": -30,
+                     "startAngle": 180, "endAngle": 0,
                      "axisLine": {
                          "lineStyle": {
-                             "width": 10,
+                             "width": 15,
                              "color": tramo_color_axisline(),   # <-- tramos fondo
                          }
                      },
@@ -111,6 +111,7 @@ if st.sidebar.button('CALCULAR RIESGO'):
                          "show": True,
                          "width": 10,
                          "itemStyle": {"color": color_progreso(v)}  # <-- color dinámico
+                         "data": {"value": kpi_pd, "name": "PD"}
                      },
      
                      "pointer": {"show": True, "length": "70%", "width": 4},
@@ -149,6 +150,7 @@ if st.sidebar.button('CALCULAR RIESGO'):
 
 else:
     st.write('DEFINE LOS PARÁMETROS DEL PRÉSTAMO Y HAZ CLICK EN CALCULAR RIESGO')
+
 
 
 
