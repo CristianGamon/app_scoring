@@ -128,7 +128,7 @@ if st.sidebar.button('CALCULAR RIESGO'):
                      #    "width": 15,
                      #    "itemStyle": {"color": color_progreso(v)},  # <-- color dinámico
                      #    "data": {"value": kpi_pd, "name": "PD"}
-                     },
+                     #},
      
                      "pointer": {"show": True, "length": "70%", "width": 4},
                      "detail": {
@@ -166,6 +166,7 @@ if st.sidebar.button('CALCULAR RIESGO'):
 
 else:
     st.write('DEFINE LOS PARÁMETROS DEL PRÉSTAMO Y HAZ CLICK EN CALCULAR RIESGO')
+
 
 
 
