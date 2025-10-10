@@ -131,7 +131,7 @@ if st.sidebar.button('CALCULAR RIESGO'):
                      #    "data": {"value": kpi_pd, "name": "PD"}
                      #},
      
-                     "pointer": {"show": True, "length": "70%", "width": 4},
+                     "pointer": {"show": True, "length": "90%", "width": 4},
                      "detail": {
                          "valueAnimation": True,
                          "formatter": "{value}",
@@ -167,6 +167,7 @@ if st.sidebar.button('CALCULAR RIESGO'):
 
 else:
     st.write('DEFINE LOS PARÁMETROS DEL PRÉSTAMO Y HAZ CLICK EN CALCULAR RIESGO')
+
 
 
 
