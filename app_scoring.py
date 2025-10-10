@@ -109,7 +109,7 @@ if st.sidebar.button('CALCULAR RIESGO'):
                          "distance": 12,
                          "fontSize": 10,
                          # Muestra solo múltiplos de 20
-                         "formatter": (lambda val: str(int(val)) if int(val) % 20 == 0 else "")
+                         "formatter": "function (val) { return (val % 20 === 0) ? val : ''; }"
                      },
                      "axisTick": {
                          "show": True,
@@ -166,6 +166,7 @@ if st.sidebar.button('CALCULAR RIESGO'):
 
 else:
     st.write('DEFINE LOS PARÁMETROS DEL PRÉSTAMO Y HAZ CLICK EN CALCULAR RIESGO')
+
 
 
 
