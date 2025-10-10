@@ -13,10 +13,10 @@ with st.sidebar:
     st.image('risk_score.jpg')
 
     #INPUTS DE LA APLICACION
-    principal = st.number_input('Importe Solicitado', 500, 50000)
-    finalidad = st.selectbox('Finalidad Préstamo', ['debt_consolidation','credit_card','home_improvement','other'])
+    principal = st.number_input('Importe Solicitado', 1000, 40000)
+    finalidad = st.selectbox('Finalidad Préstamo', ['debt_consolidation','credit_card','home_improvement','other','major_purchase','small_business','car','wedding','medical','moving','vacation','house','educational','renewable_energy'])
     num_cuotas = st.radio('Número Cuotas', ['36 months','60 months'])
-    ingresos = st.slider('Ingresos anuales', 20000, 300000)
+    ingresos = st.number_input('Ingresos anuales', 20000, 500000)
 
     #DATOS CONOCIDOS (fijadas como datos estaticos por simplicidad)
     ingresos_verificados = 'Verified'
@@ -146,6 +146,7 @@ if st.sidebar.button('CALCULAR RIESGO'):
 
 else:
     st.write('DEFINE LOS PARÁMETROS DEL PRÉSTAMO Y HAZ CLICK EN CALCULAR RIESGO')
+
 
 
 
