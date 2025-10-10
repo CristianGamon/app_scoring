@@ -4,20 +4,19 @@ from streamlit_echarts import st_echarts
 
 #CONFIGURACION DE LA PÁGINA
 st.set_page_config(
-     page_title = 'Risk Score Analyzer',
-     page_icon = '⚖️',
+     page_title = 'DS4B Risk Score Analyzer',
+     page_icon = 'DS4B_Logo_Blanco_Vertical_FB.png',
      layout = 'wide')
 
 #SIDEBAR
 with st.sidebar:
-    st.image('Perfil-crediticio.jpg')
+    st.image('risk_score.jpg')
 
     #INPUTS DE LA APLICACION
-    principal = st.slider('Importe Solicitado', 1000, 40000)
-    finalidad = st.selectbox('Finalidad Préstamo', ['debt_consolidation','credit_card','home_improvement','other','major_purchase','small_business','car','wedding','medical','moving','vacation','house','educational','renewable_energy'])
-    vivienda = st.selectbox('Tipo Vivienda', ['MORTGAGE','RENT','OWN'])
+    principal = st.number_input('Importe Solicitado', 500, 50000)
+    finalidad = st.selectbox('Finalidad Préstamo', ['debt_consolidation','credit_card','home_improvement','other'])
     num_cuotas = st.radio('Número Cuotas', ['36 months','60 months'])
-    ingresos = st.number_input('Ingresos anuales', 20000, 500000)
+    ingresos = st.slider('Ingresos anuales', 20000, 300000)
 
     #DATOS CONOCIDOS (fijadas como datos estaticos por simplicidad)
     ingresos_verificados = 'Verified'
@@ -29,10 +28,13 @@ with st.sidebar:
     tipo_interes = 7.26
     imp_cuota = 500
     num_derogatorios = 0
-    
+    vivienda = 'MORTGAGE'
+
+
+
 
 #MAIN
-st.title('RISK SCORE ANALYZER')
+st.title('DS4B RISK SCORE ANALYZER')
 
 
 #CALCULAR
@@ -67,66 +69,72 @@ if st.sidebar.button('CALCULAR RIESGO'):
     kpi_lgd = int(EL.lgd * 100)
     kpi_el = int(EL.principal * EL.pd * EL.ead * EL.lgd)
 
-    
-    
-    def etiqueta_generica(v: float):
-        if v < 40:  return "Negativo"
-        if v <= 60: return "Neutral"
-        return "Positivo"
-
-    def gauge_options(valor: float, title_label: str, label_fn=etiqueta_generica):
-        v = max(0, min(100, float(valor)))
-        etiqueta = label_fn(v)
-        return {
-            "backgroundColor": "#1f2630",
-            "series": [{
-                "type": "gauge",
-                "startAngle": 210, "endAngle": -30,
-                "min": 0, "max": 100, "splitNumber": 6,
-                "center": ["50%", "60%"], "radius": "90%",
-
-                # Arco por segmentos (rojo-ámbar-verde)
-                "axisLine": {"roundCap": True, "lineStyle": {
-                    "width": 22,
-                    "color": [[0.33, "#d84343"], [0.66, "#f1c232"], [1.0, "#3ecf8e"]],
-                }},
-                # Huecos entre segmentos (mismo color que el fondo)
-                "splitLine": {
-                    "distance": -22, "length": 12,
-                    "lineStyle": {"width": 10, "color": "#1f2630"}
-                },
-                "axisTick": {"show": False}, "axisLabel": {"show": False},
-
-                # Progreso y aguja
-                "progress": {"show": True, "roundCap": True, "width": 22, "itemStyle": {"color": "#ffffff22"}},
-                "pointer": {"show": True, "length": "72%", "width": 6, "itemStyle": {"color": "#ffffff"}},
-                "anchor": {"show": True, "size": 10, "itemStyle": {"color": "#ffffff", "shadowColor": "#00000055", "shadowBlur": 8}},
-
-                # Título (nombre del gauge) y número central
-                "title": {"show": True, "offsetCenter": [0, "20%"], "color": "#dfe6ee", "fontSize": 18, "fontWeight": 600},
-                "detail": {"valueAnimation": True, "formatter": "{value}", "color": "#ffffff", "fontSize": 44, "offsetCenter": [0, "-2%"]},
-
-                "data": [{"value": v, "name": f"{title_label} · {etiqueta}"}],
-            }],
-            "animationDuration": 600, "animationEasing": "cubicOut",
+    #Velocimetros
+    #Codigo de velocimetros tomado de https://towardsdatascience.com/5-streamlit-components-to-build-better-applications-71e0195c82d4
+    pd_options = {
+            "tooltip": {"formatter": "{a} <br/>{b} : {c}%"},
+            "series": [
+                {
+                    "name": "PD",
+                    "type": "gauge",
+                    "axisLine": {
+                        "lineStyle": {
+                            "width": 10,
+                        },
+                    },
+                    "progress": {"show": "true", "width": 10},
+                    "detail": {"valueAnimation": "true", "formatter": "{value}"},
+                    "data": [{"value": kpi_pd, "name": "PD"}],
+                }
+            ],
         }
 
-    # ---------- Inputs (ejemplo: sliders; sustituye por tus KPIs) ----------
-    #st.sidebar.header("Valores de ejemplo")
-    #kpi_pd  = st.sidebar.slider("PD",  0, 100, 54)
-    #kpi_ead = st.sidebar.slider("EAD", 0, 100, 72)
-    #kpi_lgd = st.sidebar.slider("LGD", 0, 100, 35)
+    #Velocimetro para ead
+    ead_options = {
+            "tooltip": {"formatter": "{a} <br/>{b} : {c}%"},
+            "series": [
+                {
+                    "name": "EAD",
+                    "type": "gauge",
+                    "axisLine": {
+                        "lineStyle": {
+                            "width": 10,
+                        },
+                    },
+                    "progress": {"show": "true", "width": 10},
+                    "detail": {"valueAnimation": "true", "formatter": "{value}"},
+                    "data": [{"value": kpi_ead, "name": "EAD"}],
+                }
+            ],
+        }
 
-    # ---------- Render ----------
-    st.markdown("### Indicadores de Riesgo")
-    c1, c2, c3 = st.columns(3)
+    #Velocimetro para lgd
+    lgd_options = {
+            "tooltip": {"formatter": "{a} <br/>{b} : {c}%"},
+            "series": [
+                {
+                    "name": "LGD",
+                    "type": "gauge",
+                    "axisLine": {
+                        "lineStyle": {
+                            "width": 10,
+                        },
+                    },
+                    "progress": {"show": "true", "width": 10,},
+                    "detail": {"valueAnimation": "true", "formatter": "{value}"},
+                    "data": [{"value": kpi_lgd, "name": "LGD"}],
+                }
+            ],
+        }
+    #Representarlos en la app
+    col1,col2,col3 = st.columns(3)
+    with col1:
+        st_echarts(options=pd_options, width="110%", key=0)
+    with col2:
+        st_echarts(options=ead_options, width="110%", key=1)
+    with col3:
+        st_echarts(options=lgd_options, width="110%", key=2)
 
-    with c1:
-        st_echarts(gauge_options(kpi_pd,  "PD"),  height="300px", key="gauge_pd")
-    with c2:
-        st_echarts(gauge_options(kpi_ead, "EAD"), height="300px", key="gauge_ead")
-    with c3:
-        st_echarts(gauge_options(kpi_lgd, "LGD"), height="300px", key="gauge_lgd")
     #Prescripcion
     col1,col2 = st.columns(2)
     with col1:
@@ -137,8 +145,8 @@ if st.sidebar.button('CALCULAR RIESGO'):
         st.metric(label="COMISIÓN A APLICAR", value = kpi_el * 3) #Metido en estático por simplicidad
 
 else:
-
     st.write('DEFINE LOS PARÁMETROS DEL PRÉSTAMO Y HAZ CLICK EN CALCULAR RIESGO')
+
 
 
 
