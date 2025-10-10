@@ -67,121 +67,78 @@ if st.sidebar.button('CALCULAR RIESGO'):
     kpi_lgd = int(EL.lgd * 100)
     kpi_el = int(EL.principal * EL.pd * EL.ead * EL.lgd)
 
-    #Velocimetros
-    pd_options = {
-            "xAxis": {
-                "show": False,
-                "type": "category",
-                "data": [{"value": kpi_pd, 'name': 'PD'}],
-            },
-            "yAxis": {
-                "show": False,
-                "type": "value",
-                "max": 100,
-            },
+    def build_meter_options(value, name, maximum=100):
+    
+        # Normaliza valor a 0–maximum
+        v = float(value)
+        if 0 <= v <= 1:
+            v = v * maximum
+        v = max(0, min(maximum, v))
+        prop = v / maximum  # 0–1
+        
+        options = {
+            "grid": {"left": 20, "right": 20, "bottom": 20, "top": 30},
+            "xAxis": {"show": False, "type": "value", "max": 1},
+            "yAxis": {"show": True, "type": "category", "data": [name]},
             "series": [
+                # Fondo completo
                 {
-                    "type": "bar",
-                    "data": [75],
-                    "barWidth": 30,
+                    "type": "pictorialBar",
+                    "symbol": "rect",
+                    "symbolSize": [30, 180],
+                    "symbolRepeat": False,
+                    "symbolBoundingData": 1,
+                    "itemStyle": {"color": "#E6E6E6", "opacity": 1},
+                    "z": 1,
+                    "data": [1],
+                },
+                # Relleno dinámico según value
+                {
+                    "type": "pictorialBar",
+                    "symbol": "rect",
+                    "symbolSize": [30, 180],
+                    "symbolRepeat": False,
+                    "symbolBoundingData": 1,
+                    "symbolClip": True,               # <- recorte por valor
                     "itemStyle": {
                         "color": {
                             "type": "linear",
-                            "x": 0,
-                            "y": 1,
-                            "x2": 0,
-                            "y2": 0,
+                            "x": 0, "y": 1, "x2": 0, "y2": 0,
                             "colorStops": [
-                                {"offset": 0, "color": "#55DD55"},  # verde abajo
-                                {"offset": 0.5, "color": "#FFAA00"},  # amarillo
-                                {"offset": 1, "color": "#FF4444"},  # rojo arriba
+                                {"offset": 0.0, "color": "#55DD55"},  # verde
+                                {"offset": 0.7, "color": "#FFAA00"},  # ámbar
+                                {"offset": 1.0, "color": "#FF4444"},  # rojo
                             ],
-                        },
-                        "borderRadius": [10, 10, 0, 0],
+                        }
                     },
-                }
-            ],
-        }
-
-    #Velocimetro para ead
-    ead_options = {
-            "xAxis": {
-                "show": False,
-                "type": "category",
-                "data": [{"value": kpi_ead, 'name': 'EAD'}],
-            },
-            "yAxis": {
-                "show": False,
-                "type": "value",
-                "max": 100,
-            },
-            "series": [
-                {
-                    "type": "bar",
-                    "data": [75],
-                    "barWidth": 30,
-                    "itemStyle": {
-                        "color": {
-                            "type": "linear",
-                            "x": 0,
-                            "y": 1,
-                            "x2": 0,
-                            "y2": 0,
-                            "colorStops": [
-                                {"offset": 0, "color": "#55DD55"},  # verde abajo
-                                {"offset": 0.5, "color": "#FFAA00"},  # amarillo
-                                {"offset": 1, "color": "#FF4444"},  # rojo arriba
-                            ],
-                        },
-                        "borderRadius": [10, 10, 0, 0],
+                    "label": {
+                        "show": True,
+                        "position": "insideTop",
+                        "formatter": f"{v:.0f}",
+                        "fontSize": 12,
+                        "color": "black",
                     },
-                }
+                    "z": 2,
+                    "data": [prop],
+                },
             ],
+            "animationDuration": 600,
+            "animationEasing": "cubicOut",
         }
-
-    #Velocimetro para lgd
-    lgd_options = {
-            "xAxis": {
-                "show": False,
-                "type": "category",
-                "data": [{"value": kpi_lgd, 'name': 'LGD'}],
-            },
-            "yAxis": {
-                "show": False,
-                "type": "value",
-                "max": 100,
-            },
-            "series": [
-                {
-                    "type": "bar",
-                    "data": [75],
-                    "barWidth": 30,
-                    "itemStyle": {
-                        "color": {
-                            "type": "linear",
-                            "x": 0,
-                            "y": 1,
-                            "x2": 0,
-                            "y2": 0,
-                            "colorStops": [
-                                {"offset": 0, "color": "#55DD55"},  # verde abajo
-                                {"offset": 0.5, "color": "#FFAA00"},  # amarillo
-                                {"offset": 1, "color": "#FF4444"},  # rojo arriba
-                            ],
-                        },
-                        "borderRadius": [10, 10, 0, 0],
-                    },
-                }
-            ],
-        }
+        return options
+    
+    pd_options  = build_meter_options(kpi_pd,  name="pd",  maximum=100)
+    ead_options = build_meter_options(kpi_ead, name="ead", maximum=100)
+    lgd_options = build_meter_options(kpi_lgd, name="lgd", maximum=100)
+    
     #Representarlos en la app
     col1,col2,col3 = st.columns(3)
     with col1:
-        st_echarts(options=pd_options, width="110%", height="300px")
+        st_echarts(options=pd_options, width="110%", height="300px", key = 'meter_pd')
     with col2:
-        st_echarts(options=ead_options, width="110%", height="300px")
+        st_echarts(options=ead_options, width="110%", height="300px", key = 'meter_ead')
     with col3:
-        st_echarts(options=lgd_options, width="110%", height="300px")
+        st_echarts(options=lgd_options, width="110%", height="300px", key = 'meter_lgd')
 
     #Prescripcion
     col1,col2 = st.columns(2)
