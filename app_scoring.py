@@ -125,18 +125,18 @@ if st.sidebar.button('CALCULAR RIESGO'):
              ]
          }
    # Velocímetros con color por rango
-     pd_options  = build_gauge("PD",  kpi_pd)
-     ead_options = build_gauge("EAD", kpi_ead)
-     lgd_options = build_gauge("LGD", kpi_lgd)
+    pd_options  = build_gauge("PD", kpi_pd)
+    ead_options = build_gauge("EAD", kpi_ead)
+    lgd_options = build_gauge("LGD", kpi_lgd)
      
      # Render
-     col1, col2, col3 = st.columns(3)
-     with col1:
-         st_echarts(options=pd_options,  width="100%", height="240px", key="g_pd")
-     with col2:
-         st_echarts(options=ead_options, width="100%", height="240px", key="g_ead")
-     with col3:
-         st_echarts(options=lgd_options, width="100%", height="240px", key="g_lgd")
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st_echarts(options=pd_options,  width="100%", height="240px", key="g_pd")
+    with col2:
+        st_echarts(options=ead_options, width="100%", height="240px", key="g_ead")
+    with col3:
+        st_echarts(options=lgd_options, width="100%", height="240px", key="g_lgd")
 
     #Prescripcion
     col1,col2 = st.columns(2)
@@ -149,6 +149,7 @@ if st.sidebar.button('CALCULAR RIESGO'):
 
 else:
     st.write('DEFINE LOS PARÁMETROS DEL PRÉSTAMO Y HAZ CLICK EN CALCULAR RIESGO')
+
 
 
 
