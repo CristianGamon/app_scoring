@@ -102,9 +102,25 @@ if st.sidebar.button('CALCULAR RIESGO'):
                              "color": tramo_color_axisline(),   # <-- tramos fondo
                          }
                      },
-                     "splitLine": {"show": False},
-                     "axisTick": {"show": False},
-                     "axisLabel": {"show": False},
+                    # === Escala visible ===
+                     "splitNumber": 5,            # nº de divisiones grandes entre min/max
+                     "axisLabel": {
+                         "show": True,
+                         "distance": 12,
+                         "fontSize": 10,
+                         # Muestra solo múltiplos de 20
+                         "formatter": (lambda val: str(int(val)) if int(val) % 20 == 0 else "")
+                     },
+                     "axisTick": {
+                         "show": True,
+                         "length": 6,
+                         "lineStyle": {"width": 2}
+                     },
+                     "splitLine": {
+                         "show": True,
+                         "length": 12,
+                         "lineStyle": {"width": 3}
+                     },
      
                      # Relleno que cambia de color según el valor
                      "progress": {
@@ -150,6 +166,7 @@ if st.sidebar.button('CALCULAR RIESGO'):
 
 else:
     st.write('DEFINE LOS PARÁMETROS DEL PRÉSTAMO Y HAZ CLICK EN CALCULAR RIESGO')
+
 
 
 
