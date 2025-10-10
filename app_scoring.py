@@ -73,8 +73,8 @@ if st.sidebar.button('CALCULAR RIESGO'):
     def tramo_color_axisline():
     # Fondo segmentado: verde 0-35, naranja 35-70, rojo 70-100
          return [
-             [0.50, "#2ECC71"],  # verde hasta 35%
-             [0.80, "#F39C12"],  # naranja hasta 70%
+             [0.60, "#2ECC71"],  # verde hasta 35%
+             [0.85, "#F39C12"],  # naranja hasta 70%
              [1.00, "#E74C3C"],  # rojo hasta 100%
          ]
 
@@ -168,6 +168,7 @@ if st.sidebar.button('CALCULAR RIESGO'):
 
 else:
     st.write('DEFINE LOS PARÁMETROS DEL PRÉSTAMO Y HAZ CLICK EN CALCULAR RIESGO')
+
 
 
 
