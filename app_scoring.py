@@ -112,10 +112,10 @@ if st.sidebar.button('CALCULAR RIESGO'):
         }
 
     # ---------- Inputs (ejemplo: sliders; sustituye por tus KPIs) ----------
-    st.sidebar.header("Valores de ejemplo")
-    kpi_pd  = st.sidebar.slider("PD",  0, 100, 54)
-    kpi_ead = st.sidebar.slider("EAD", 0, 100, 72)
-    kpi_lgd = st.sidebar.slider("LGD", 0, 100, 35)
+    #st.sidebar.header("Valores de ejemplo")
+    #kpi_pd  = st.sidebar.slider("PD",  0, 100, 54)
+    #kpi_ead = st.sidebar.slider("EAD", 0, 100, 72)
+    #kpi_lgd = st.sidebar.slider("LGD", 0, 100, 35)
 
     # ---------- Render ----------
     st.markdown("### Indicadores de Riesgo")
@@ -139,6 +139,7 @@ if st.sidebar.button('CALCULAR RIESGO'):
 else:
 
     st.write('DEFINE LOS PARÁMETROS DEL PRÉSTAMO Y HAZ CLICK EN CALCULAR RIESGO')
+
 
 
 
