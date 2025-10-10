@@ -67,60 +67,106 @@ if st.sidebar.button('CALCULAR RIESGO'):
     kpi_lgd = int(EL.lgd * 100)
     kpi_el = int(EL.principal * EL.pd * EL.ead * EL.lgd)
 
-    def build_meter_options(value, name, maximum=100):
     
-        # Normaliza valor a 0–maximum
-        v = float(value)
-        if 0 <= v <= 1:
-            v = v * maximum
-        v = max(0, min(maximum, v))
-        prop = v / maximum  # 0–1
-        
+    
+    # Normaliza valor a 0–maximum
+    v = float(value)
+    if 0 <= v <= 1:
+        v = v * maximum
+    v = max(0, min(maximum, v))
+    prop = v / maximum  # 0–1
+    
+    def label_from_value(v: float) -> str:
+        """Etiqueta según el valor (0-100). Cambia los umbrales a tu gusto."""
+        if v < 40:
+            return "Negativo"
+        elif v <= 60:
+            return "Neutral"
+        return "Positivo"
+
+    def gauge_options(value: float):
+        """
+        Devuelve la configuración ECharts para un indicador semicircular
+        con segmentos y valor central. value entre 0 y 100.
+        """
+        value = max(0, min(100, float(value)))
         options = {
-            "grid": {"left": 20, "right": 20, "bottom": 20, "top": 30},
-            "xAxis": {"show": False, "type": "value", "max": 1},
-            "yAxis": {"show": True, "type": "category", "data": [name]},
+            "backgroundColor": "#1f2630",  # fondo oscuro similar a la imagen
             "series": [
-                # Fondo completo
                 {
-                    "type": "pictorialBar",
-                    "symbol": "rect",
-                    "symbolSize": [30, 180],
-                    "symbolRepeat": False,
-                    "symbolBoundingData": 1,
-                    "itemStyle": {"color": "#E6E6E6", "opacity": 1},
-                    "z": 1,
-                    "data": [1],
-                },
-                # Relleno dinámico según value
-                {
-                    "type": "pictorialBar",
-                    "symbol": "rect",
-                    "symbolSize": [30, 180],
-                    "symbolRepeat": False,
-                    "symbolBoundingData": 1,
-                    "symbolClip": True,               # <- recorte por valor
-                    "itemStyle": {
-                        "color": {
-                            "type": "linear",
-                            "x": 0, "y": 1, "x2": 0, "y2": 0,
-                            "colorStops": [
-                                {"offset": 0.0, "color": "#55DD55"},  # verde
-                                {"offset": 0.7, "color": "#FFAA00"},  # ámbar
-                                {"offset": 1.0, "color": "#FF4444"},  # rojo
+                    "type": "gauge",
+                    "startAngle": 210,     # semicircular
+                    "endAngle": -30,
+                    "min": 0,
+                    "max": 100,
+                    "splitNumber": 6,      # número de tramos
+                    "center": ["50%", "60%"],
+                    "radius": "90%",
+
+                    # arco de fondo con segmentos (rojo -> ámbar -> verde)
+                    "axisLine": {
+                        "roundCap": True,
+                        "lineStyle": {
+                            "width": 22,
+                            "color": [
+                                [0.33, "#d84343"],  # rojo
+                                [0.66, "#f1c232"],  # ámbar
+                                [1.00, "#3ecf8e"],  # verde
                             ],
-                        }
+                        },
                     },
-                    "label": {
+                    # líneas de división gruesas para simular “segmentos con hueco”
+                    "splitLine": {
+                        "distance": -22,
+                        "length": 12,
+                        "lineStyle": {"width": 10, "color": "#1f2630"}  # mismo color del fondo
+                    },
+                    "axisTick": {"show": False},
+                    "axisLabel": {"show": False},
+
+                    # progreso relleno (arco que avanza)
+                    "progress": {
                         "show": True,
-                        "position": "insideTop",
-                        "formatter": f"{v:.0f}",
-                        "fontSize": 12,
-                        "color": "black",
+                        "roundCap": True,
+                        "width": 22,
+                        "itemStyle": {"color": "#ffffff22"},  # color del “relleno” encima; sutil
                     },
-                    "z": 2,
-                    "data": [prop],
-                },
+
+                    # aguja sencilla (opcional). Si no la quieres, pon "show": False
+                    "pointer": {
+                        "show": True,
+                        "length": "72%",
+                        "width": 6,
+                        "itemStyle": {"color": "#ffffff"}  # blanco
+                    },
+
+                    # círculo en la punta de la aguja (truco: shadow y border)
+                    "anchor": {   # ancla en el centro (estética, opcional)
+                        "show": True,
+                        "size": 10,
+                        "itemStyle": {"color": "#ffffff", "shadowColor": "#00000055", "shadowBlur": 8}
+                    },
+
+                    # título (debajo del número)
+                    "title": {
+                        "show": True,
+                        "offsetCenter": [0, "20%"],
+                        "color": "#dfe6ee",
+                        "fontSize": 22,
+                        "fontWeight": "600"
+                    },
+
+                    # número grande
+                    "detail": {
+                        "valueAnimation": True,
+                        "formatter": "{value}",
+                        "color": "#ffffff",
+                        "fontSize": 48,
+                        "offsetCenter": [0, "-2%"],
+                    },
+
+                    "data": [{"value": value, "name": label_from_value(value)}],
+                }
             ],
             "animationDuration": 600,
             "animationEasing": "cubicOut",
@@ -152,5 +198,6 @@ if st.sidebar.button('CALCULAR RIESGO'):
 else:
 
     st.write('DEFINE LOS PARÁMETROS DEL PRÉSTAMO Y HAZ CLICK EN CALCULAR RIESGO')
+
 
 
