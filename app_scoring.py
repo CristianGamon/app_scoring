@@ -107,7 +107,7 @@ if st.sidebar.button('CALCULAR RIESGO'):
                      "axisLabel": {
                          "show": True,
                          "distance": 24,
-                         "fontSize": 8,
+                         "fontSize": 9,
                          # Muestra solo múltiplos de 20
                          "formatter": "{value}"
                      },
@@ -118,8 +118,8 @@ if st.sidebar.button('CALCULAR RIESGO'):
                      },
                      "splitLine": {
                          "show": True,
-                         "length": 12,
-                         "lineStyle": {"width": 8}
+                         "length": 10,
+                         "lineStyle": {"width": 3}
                      },
      
                      # Relleno que cambia de color según el valor
@@ -166,6 +166,7 @@ if st.sidebar.button('CALCULAR RIESGO'):
 
 else:
     st.write('DEFINE LOS PARÁMETROS DEL PRÉSTAMO Y HAZ CLICK EN CALCULAR RIESGO')
+
 
 
 
