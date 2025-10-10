@@ -5,12 +5,12 @@ from streamlit_echarts import st_echarts
 #CONFIGURACION DE LA PÁGINA
 st.set_page_config(
      page_title = 'DS4B Risk Score Analyzer',
-     page_icon = 'DS4B_Logo_Blanco_Vertical_FB.png',
+     page_icon = 'dollar',
      layout = 'wide')
 
 #SIDEBAR
 with st.sidebar:
-    st.image('risk_score.jpg')
+    st.image('Perfil-crediticio.jpg')
 
     #INPUTS DE LA APLICACION
     principal = st.number_input('Importe Solicitado', 1000, 40000)
@@ -146,6 +146,7 @@ if st.sidebar.button('CALCULAR RIESGO'):
 
 else:
     st.write('DEFINE LOS PARÁMETROS DEL PRÉSTAMO Y HAZ CLICK EN CALCULAR RIESGO')
+
 
 
 
