@@ -129,11 +129,11 @@ if st.sidebar.button('CALCULAR RIESGO'):
     #Representarlos en la app
     col1,col2,col3 = st.columns(3)
     with col1:
-        st_echarts(options=pd_options, width="110%", key=0)
+        st_echarts(options=pd_options, width="110%")
     with col2:
-        st_echarts(options=ead_options, width="110%", key=1)
+        st_echarts(options=ead_options, width="110%")
     with col3:
-        st_echarts(options=lgd_options, width="110%", key=2)
+        st_echarts(options=lgd_options, width="110%")
 
     #Prescripcion
     col1,col2 = st.columns(2)
@@ -146,6 +146,7 @@ if st.sidebar.button('CALCULAR RIESGO'):
 
 else:
     st.write('DEFINE LOS PARÁMETROS DEL PRÉSTAMO Y HAZ CLICK EN CALCULAR RIESGO')
+
 
 
 
