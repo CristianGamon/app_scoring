@@ -71,19 +71,20 @@ if st.sidebar.button('CALCULAR RIESGO'):
 
     def tramo_color_axisline():
     # Fondo segmentado: verde 0-35, naranja 35-70, rojo 70-100
-    return [
-        [0.35, "#2ECC71"],  # verde hasta 35%
-        [0.70, "#F39C12"],  # naranja hasta 70%
-        [1.00, "#E74C3C"],  # rojo hasta 100%
-    ]
+         return [
+             [0.35, "#2ECC71"],  # verde hasta 35%
+             [0.70, "#F39C12"],  # naranja hasta 70%
+             [1.00, "#E74C3C"],  # rojo hasta 100%
+         ]
 
-    def tramo_color_axisline():
-    # Fondo segmentado: verde 0-35, naranja 35-70, rojo 70-100
-    return [
-        [0.35, "#2ECC71"],  # verde hasta 35%
-        [0.70, "#F39C12"],  # naranja hasta 70%
-        [1.00, "#E74C3C"],  # rojo hasta 100%
-    ]
+    def color_progreso(valor):
+    # Color del relleno según el valor actual
+         if valor < 35:
+             return "#2ECC71"  # verde
+         elif valor < 70:
+             return "#F39C12"  # naranja
+         else:
+             return "#E74C3C"  # rojo
      #Velocimetros
     #Codigo de velocimetros tomado de https://towardsdatascience.com/5-streamlit-components-to-build-better-applications-71e0195c82d4
     def build_gauge(nombre, valor):
@@ -148,6 +149,7 @@ if st.sidebar.button('CALCULAR RIESGO'):
 
 else:
     st.write('DEFINE LOS PARÁMETROS DEL PRÉSTAMO Y HAZ CLICK EN CALCULAR RIESGO')
+
 
 
 
