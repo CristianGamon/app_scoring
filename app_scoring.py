@@ -109,8 +109,8 @@ if st.sidebar.button('CALCULAR RIESGO'):
                      # Relleno que cambia de color según el valor
                      "progress": {
                          "show": True,
-                         "width": 10,
-                         "itemStyle": {"color": color_progreso(v)}  # <-- color dinámico
+                         "width": 15,
+                         "itemStyle": {"color": color_progreso(v)},  # <-- color dinámico
                          "data": {"value": kpi_pd, "name": "PD"}
                      },
      
@@ -150,6 +150,7 @@ if st.sidebar.button('CALCULAR RIESGO'):
 
 else:
     st.write('DEFINE LOS PARÁMETROS DEL PRÉSTAMO Y HAZ CLICK EN CALCULAR RIESGO')
+
 
 
 
