@@ -96,6 +96,7 @@ if st.sidebar.button('CALCULAR RIESGO'):
                      "type": "gauge",
                      "min": 0, "max": 100,
                      "startAngle": 180, "endAngle": 0,
+                     "radius": "95%",
                      "axisLine": {
                          "lineStyle": {
                              "width": 15,
@@ -166,6 +167,7 @@ if st.sidebar.button('CALCULAR RIESGO'):
 
 else:
     st.write('DEFINE LOS PARÁMETROS DEL PRÉSTAMO Y HAZ CLICK EN CALCULAR RIESGO')
+
 
 
 
