@@ -35,6 +35,7 @@ with st.sidebar:
 
 #MAIN
 st.title('RISK SCORE ANALYZER')
+st.markdown("<br><br>", unsafe_allow_html=True)
 
 
 #CALCULAR
@@ -135,7 +136,8 @@ if st.sidebar.button('CALCULAR RIESGO'):
                      "detail": {
                          "valueAnimation": True,
                          "formatter": "{value}",
-                         "fontSize": 18
+                         "fontSize": 18,
+                         "Color": "black",
                      },
                      "title": {"show": True, "fontSize": 12, "offsetCenter": [0, "25%"]},
                      "data": [{"value": v, "name": nombre.upper()}],
@@ -167,6 +169,7 @@ if st.sidebar.button('CALCULAR RIESGO'):
 
 else:
     st.write('DEFINE LOS PARÁMETROS DEL PRÉSTAMO Y HAZ CLICK EN CALCULAR RIESGO')
+
 
 
 
