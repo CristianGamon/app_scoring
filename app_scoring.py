@@ -13,10 +13,10 @@ with st.sidebar:
     st.image('Perfil-crediticio.jpg')
 
     #INPUTS DE LA APLICACION
-    principal = st.slider('Importe Solicitado', 1000, 40000)
     vivienda = st.selectbox('Situación Vivienda', ['MORTGAGE','RENT','OWN'])
     ingresos = st.number_input('Ingresos anuales', 20000, 500000)
     antigüedad_empleo = st.selectbox('Antigüedad Empleo', ['< 1 year','1 year','2 years','3 years','4 years','5 years','6 years','7 years','8 years','9 years','10+ years','desconocido'])
+    principal = st.slider('Importe Solicitado', 1000, 40000)
     finalidad = st.selectbox('Finalidad Préstamo', ['debt_consolidation','credit_card','home_improvement','other','major_purchase','small_business','car','wedding','medical','moving','vacation','house','educational','renewable_energy'])
     num_cuotas = st.radio('Número Cuotas', ['36 months','60 months'])
     
@@ -153,6 +153,7 @@ if st.sidebar.button('CALCULAR RIESGO'):
 
 else:
     st.write('DEFINE LOS PARÁMETROS DEL PRÉSTAMO Y HAZ CLICK EN CALCULAR RIESGO')
+
 
 
 
