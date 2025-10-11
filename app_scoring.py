@@ -2,7 +2,7 @@ from codigo_de_ejecucion import *
 import streamlit as st
 from streamlit_echarts import st_echarts
 
-#CONFIGURACION DE LA PÁGINA
+#PAGE CONFIGURATION
 st.set_page_config(
      page_title = 'Risk Score Analyzer',
      page_icon = 'dollar',
@@ -12,16 +12,16 @@ st.set_page_config(
 with st.sidebar:
     st.image('Perfil-crediticio.jpg')
 
-    #INPUTS DE LA APLICACION
-    vivienda = st.selectbox('Situación Vivienda', ['MORTGAGE','RENT','OWN'])
-    ingresos = st.number_input('Ingresos anuales', 20000, 500000)
-    antigüedad_empleo = st.selectbox('Antigüedad Empleo', ['< 1 year','1 year','2 years','3 years','4 years','5 years','6 years','7 years','8 years','9 years','10+ years','desconocido'])
-    principal = st.slider('Importe Solicitado', 1000, 40000)
-    finalidad = st.selectbox('Finalidad Préstamo', ['debt_consolidation','credit_card','home_improvement','other','major_purchase','small_business','car','wedding','medical','moving','vacation','house','educational','renewable_energy'])
-    num_cuotas = st.radio('Número Cuotas', ['36 months','60 months'])
+    #APPLICATION INPUTS
+    vivienda = st.selectbox('Housing Situation', ['MORTGAGE','RENT','OWN'])
+    ingresos = st.number_input('Annual Income', 20000, 500000)
+    antigüedad_empleo = st.selectbox('Employment Length', ['< 1 year','1 year','2 years','3 years','4 years','5 years','6 years','7 years','8 years','9 years','10+ years','unknown'])
+    principal = st.slider('Requested Amount', 1000, 40000)
+    finalidad = st.selectbox('Loan Purpose', ['debt_consolidation','credit_card','home_improvement','other','major_purchase','small_business','car','wedding','medical','moving','vacation','house','educational','renewable_energy'])
+    num_cuotas = st.radio('Number of Installments', ['36 months','60 months'])
     
 
-    #DATOS CONOCIDOS (fijadas como datos estaticos por simplicidad)
+    #KNOWN DATA (set as static values for simplicity)
     ingresos_verificados = 'Verified'
     antigüedad_empleo = '10+ years'
     rating = 'B'
@@ -35,15 +35,14 @@ with st.sidebar:
 
 
 
-
 #MAIN
 st.title('RISK SCORE ANALYZER')
 st.markdown("<br><br><br>", unsafe_allow_html=True)
 
 
-#CALCULAR
+#CALCULATE
 
-#Crear el registro
+#Create record
 registro = pd.DataFrame({'ingresos_verificados':ingresos_verificados,
                          'vivienda':vivienda,
                          'finalidad':finalidad,
@@ -62,23 +61,23 @@ registro = pd.DataFrame({'ingresos_verificados':ingresos_verificados,
 
 
 
-#CALCULAR RIESGO
-if st.sidebar.button('CALCULAR RIESGO'):
-    #Ejecutar el scoring
+#CALCULATE RISK
+if st.sidebar.button('CALCULATE RISK'):
+    #Run the scoring
     EL = ejecutar_modelos(registro)
 
-    #Calcular los kpis
+    #Calculate KPIs
     kpi_pd = int(EL.pd * 100)
     kpi_ead = int(EL.ead * 100)
     kpi_lgd = int(EL.lgd * 100)
     kpi_el = int(EL.principal * EL.pd * EL.ead * EL.lgd)
 
     def tramo_color_axisline():
-    # Fondo segmentado: verde 0-35, naranja 35-70, rojo 70-100
+    # Segmented background: green 0-35, orange 35-70, red 70-100
          return [
-             [0.60, "#2ECC71"],  # verde hasta 35%
-             [0.85, "#F39C12"],  # naranja hasta 70%
-             [1.00, "#E74C3C"],  # rojo hasta 100%
+             [0.60, "#2ECC71"],  # green up to 35%
+             [0.85, "#F39C12"],  # orange up to 70%
+             [1.00, "#E74C3C"],  # red up to 100%
          ]
 
     def build_gauge(nombre, valor):
@@ -94,16 +93,16 @@ if st.sidebar.button('CALCULAR RIESGO'):
                      "axisLine": {
                          "lineStyle": {
                              "width": 15,
-                             "color": tramo_color_axisline(),   # <-- tramos fondo
+                             "color": tramo_color_axisline(),   # <-- background segments
                          }
                      },
-                    # === Escala visible ===
-                     "splitNumber": 5,            # nº de divisiones grandes entre min/max
+                    # === Visible scale ===
+                     "splitNumber": 5,            # number of major divisions between min/max
                      "axisLabel": {
                          "show": True,
                          "distance": 24,
                          "fontSize": 9,
-                         # Muestra solo múltiplos de 20
+                         # Show only multiples of 20
                          "formatter": "{value}"
                      },
                      "axisTick": {
@@ -128,7 +127,7 @@ if st.sidebar.button('CALCULAR RIESGO'):
                  }
              ]
          }
-   # Velocímetros con color por rango
+   # Gauges with color by range
     pd_options  = build_gauge("PD", kpi_pd)
     ead_options = build_gauge("EAD", kpi_ead)
     lgd_options = build_gauge("LGD", kpi_lgd)
@@ -142,17 +141,19 @@ if st.sidebar.button('CALCULAR RIESGO'):
     with col3:
         st_echarts(options=lgd_options, width="100%", height="240px", key="g_lgd")
 
-    #Prescripcion
+    #Prescription
     col1,col2 = st.columns(2)
     with col1:
-        st.write('La pérdida esperada es de (Euros):')
-        st.metric(label="PÉRDIDA ESPERADA", value = kpi_el)
+        st.write('The expected loss is (Euros):')
+        st.metric(label="EXPECTED LOSS", value = kpi_el)
     with col2:
-        st.write('Se recomienda un extratipo de (Euros):')
-        st.metric(label="COMISIÓN A APLICAR", value = kpi_el * 3) #Metido en estático por simplicidad
+        st.write('It is recommended to apply a surcharge of (Euros):')
+        st.metric(label="RECOMMENDED FEE", value = kpi_el * 3) #Static for simplicity
 
 else:
-    st.write('DEFINE LOS PARÁMETROS DEL PRÉSTAMO Y HAZ CLICK EN CALCULAR RIESGO')
+    st.write('DEFINE THE LOAN PARAMETERS AND CLICK ON CALCULATE RISK')
+
+
 
 
 
