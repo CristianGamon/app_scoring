@@ -13,11 +13,13 @@ with st.sidebar:
     st.image('Perfil-crediticio.jpg')
 
     #INPUTS DE LA APLICACION
-    principal = st.number_input('Importe Solicitado', 1000, 40000)
-    vivienda = st.selectbox('Situación Vivienda', ['MORTGAGE','RENT','OWN']) 
+    principal = st.slider('Importe Solicitado', 1000, 40000)
+    vivienda = st.selectbox('Situación Vivienda', ['MORTGAGE','RENT','OWN'])
+    ingresos = st.number_input('Ingresos anuales', 20000, 500000)
+    antigüedad_empleo = st.selectbox('Antigüedad Empleo', ['< 1 year','1 year','2 years','3 years','4 years','5 years','6 years','7 years','8 years','9 years','10+ years','desconocido'])
     finalidad = st.selectbox('Finalidad Préstamo', ['debt_consolidation','credit_card','home_improvement','other','major_purchase','small_business','car','wedding','medical','moving','vacation','house','educational','renewable_energy'])
     num_cuotas = st.radio('Número Cuotas', ['36 months','60 months'])
-    ingresos = st.number_input('Ingresos anuales', 20000, 500000)
+    
 
     #DATOS CONOCIDOS (fijadas como datos estaticos por simplicidad)
     ingresos_verificados = 'Verified'
@@ -36,7 +38,7 @@ with st.sidebar:
 
 #MAIN
 st.title('RISK SCORE ANALYZER')
-st.markdown("<br><br><br><br>", unsafe_allow_html=True)
+st.markdown("<br><br><br>", unsafe_allow_html=True)
 
 
 #CALCULAR
@@ -79,16 +81,6 @@ if st.sidebar.button('CALCULAR RIESGO'):
              [1.00, "#E74C3C"],  # rojo hasta 100%
          ]
 
-    #def color_progreso(valor):
-    # Color del relleno según el valor actual
-        # if valor < 35:
-        #     return "#2C3DBEFF"  # verde
-         #elif valor < 70:
-         #    return "#2C3DBEFF"  # naranja
-        # else:
-           #  return "#2C3DBEFF"  # rojo
-     #Velocimetros
-    #Codigo de velocimetros tomado de https://towardsdatascience.com/5-streamlit-components-to-build-better-applications-71e0195c82d4
     def build_gauge(nombre, valor):
          v = max(0, min(100, int(valor)))
          return {
@@ -124,14 +116,6 @@ if st.sidebar.button('CALCULAR RIESGO'):
                          "length": 10,
                          "lineStyle": {"width": 3}
                      },
-     
-                     # Relleno que cambia de color según el valor
-                     #"progress": {
-                     #    "show": True,
-                     #    "width": 15,
-                     #    "itemStyle": {"color": color_progreso(v)},  # <-- color dinámico
-                     #    "data": {"value": kpi_pd, "name": "PD"}
-                     #},
      
                      "pointer": {"show": True, "length": "100%", "width": 4, "itemStyle":{"color":"#212228FF"}},
                      "detail": {
@@ -169,6 +153,7 @@ if st.sidebar.button('CALCULAR RIESGO'):
 
 else:
     st.write('DEFINE LOS PARÁMETROS DEL PRÉSTAMO Y HAZ CLICK EN CALCULAR RIESGO')
+
 
 
 
