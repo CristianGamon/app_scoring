@@ -128,9 +128,9 @@ if st.sidebar.button('CALCULATE RISK'):
              ]
          }
    # Gauges with color by range
-    pd_options  = build_gauge("PD", kpi_pd)
-    ead_options = build_gauge("EAD", kpi_ead)
-    lgd_options = build_gauge("LGD", kpi_lgd)
+    pd_options  = build_gauge("Probability Of Default", kpi_pd)
+    ead_options = build_gauge("Exposure At Default", kpi_ead)
+    lgd_options = build_gauge("Loss Given Default", kpi_lgd)
      
      # Render
     col1, col2, col3 = st.columns(3)
@@ -152,6 +152,7 @@ if st.sidebar.button('CALCULATE RISK'):
 
 else:
     st.write('DEFINE THE LOAN PARAMETERS AND CLICK ON CALCULATE RISK')
+
 
 
 
