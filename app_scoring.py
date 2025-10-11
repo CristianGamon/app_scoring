@@ -29,7 +29,7 @@ with st.sidebar:
     tipo_interes = 7.26
     imp_cuota = 500
     num_derogatorios = 0
-    vivienda = 'MORTGAGE'
+    
 
 
 
@@ -169,6 +169,7 @@ if st.sidebar.button('CALCULAR RIESGO'):
 
 else:
     st.write('DEFINE LOS PARÁMETROS DEL PRÉSTAMO Y HAZ CLICK EN CALCULAR RIESGO')
+
 
 
 
