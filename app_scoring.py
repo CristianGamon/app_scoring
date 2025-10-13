@@ -33,8 +33,6 @@ with st.sidebar:
     num_derogatorios = 0
     
 
-
-
 #MAIN
 st.title('RISK SCORE ANALYZER')
 st.markdown("<br><br><br>", unsafe_allow_html=True)
@@ -73,11 +71,11 @@ if st.sidebar.button('CALCULATE RISK'):
     kpi_el = int(EL.principal * EL.pd * EL.ead * EL.lgd)
 
     def tramo_color_axisline():
-    # Segmented background: green 0-35, orange 35-70, red 70-100
+    # Segmented background: green 0-60, orange 60-85, red 85-100
          return [
-             [0.60, "#2ECC71"],  # green up to 35%
-             [0.85, "#F39C12"],  # orange up to 70%
-             [1.00, "#E74C3C"],  # red up to 100%
+             [0.60, "#2ECC71"],  
+             [0.85, "#F39C12"],  
+             [1.00, "#E74C3C"],  
          ]
 
     def build_gauge(nombre, valor):
@@ -93,16 +91,15 @@ if st.sidebar.button('CALCULATE RISK'):
                      "axisLine": {
                          "lineStyle": {
                              "width": 15,
-                             "color": tramo_color_axisline(),   # <-- background segments
+                             "color": tramo_color_axisline(),   
                          }
                      },
                     # === Visible scale ===
-                     "splitNumber": 5,            # number of major divisions between min/max
+                     "splitNumber": 5,            
                      "axisLabel": {
                          "show": True,
                          "distance": 24,
-                         "fontSize": 9,
-                         # Show only multiples of 20
+                         "fontSize": 9,                         
                          "formatter": "{value}"
                      },
                      "axisTick": {
@@ -148,10 +145,11 @@ if st.sidebar.button('CALCULATE RISK'):
         st.metric(label="EXPECTED LOSS", value = kpi_el)
     with col2:
         st.write('It is recommended to apply a surcharge of (Euros):')
-        st.metric(label="RECOMMENDED FEE", value = kpi_el * 3) #Static for simplicity
+        st.metric(label="RECOMMENDED FEE", value = kpi_el * 3) 
 
 else:
     st.write('DEFINE THE LOAN PARAMETERS AND CLICK ON CALCULATE RISK')
+
 
 
 
