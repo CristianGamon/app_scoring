@@ -16,7 +16,7 @@ with st.sidebar:
     vivienda = st.selectbox('Housing Situation', ['MORTGAGE','RENT','OWN'])
     ingresos = st.number_input('Annual Income', 20000, 500000)
     antigüedad_empleo = st.selectbox('Employment Length', ['< 1 year','1 year','2 years','3 years','4 years','5 years','6 years','7 years','8 years','9 years','10+ years','unknown'])
-    principal = st.slider('Requested Amount', 1000, 40000)
+    principal = st.slider('Requested Amount', 500, 40000)
     finalidad = st.selectbox('Loan Purpose', ['debt_consolidation','credit_card','home_improvement','other','major_purchase','small_business','car','wedding','medical','moving','vacation','house','educational','renewable_energy'])
     num_cuotas = st.radio('Number of Installments', ['36 months','60 months'])
     
@@ -149,6 +149,7 @@ if st.sidebar.button('CALCULATE RISK'):
 
 else:
     st.write('DEFINE THE LOAN PARAMETERS AND CLICK ON CALCULATE RISK')
+
 
 
 
