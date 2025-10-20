@@ -34,7 +34,7 @@ with st.sidebar:
     
 
 #MAIN
-st.title('RISK SCORE ANALYZER')
+st.title('CreditScore Studio')
 st.markdown("<br><br><br>", unsafe_allow_html=True)
 
 
@@ -149,6 +149,7 @@ if st.sidebar.button('CALCULATE RISK'):
 
 else:
     st.write('DEFINE THE LOAN PARAMETERS AND CLICK ON CALCULATE RISK')
+
 
 
 
