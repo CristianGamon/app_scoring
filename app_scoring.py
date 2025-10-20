@@ -4,7 +4,7 @@ from streamlit_echarts import st_echarts
 
 #PAGE CONFIGURATION
 st.set_page_config(
-     page_title = 'Risk Score Analyzer',
+     page_title = 'CreditScore Studio',
      page_icon = 'dollar',
      layout = 'wide')
 
@@ -149,6 +149,7 @@ if st.sidebar.button('CALCULATE RISK'):
 
 else:
     st.write('DEFINE THE LOAN PARAMETERS AND CLICK ON CALCULATE RISK')
+
 
 
 
