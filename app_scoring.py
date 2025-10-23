@@ -23,7 +23,6 @@ with st.sidebar:
 
     #KNOWN DATA (set as static values for simplicity)
     ingresos_verificados = 'Verified'
-    antigüedad_empleo = '10+ years'
     rating = 'B'
     dti = 28
     num_lineas_credito = 3
@@ -149,6 +148,7 @@ if st.sidebar.button('CALCULATE RISK'):
 
 else:
     st.write('DEFINE THE LOAN PARAMETERS AND CLICK ON CALCULATE RISK')
+
 
 
 
